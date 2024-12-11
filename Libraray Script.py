@@ -3,6 +3,8 @@ import itertools
 import numpy as np
 import pandas as pd
 
+import streamlit as sl
+
 conn=sql.Connection('library.db')
 
 curr=conn.cursor()
