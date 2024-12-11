@@ -368,178 +368,178 @@ class Library:
 
     def getAllBooks(self):
         curr.execute('select * from books')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
     
     def getBooksOnTitle(self,x):
         curr.execute('select * from books where title = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnNumber(self,x):
         curr.execute('select * from books where book_number = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnLang(self,x):
         curr.execute('select * from books where lang = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnGenre(self,x):
         curr.execute('select * from books where Genre = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnYearPublished(self,x):
         curr.execute('select * from books where year_published = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnPublisher(self,x):
         curr.execute('select * from books where publisher = ?',(x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getAvailableBooks(self):
         curr.execute('SELECT b.* FROM books b LEFT JOIN (SELECT book_number, COUNT(*) AS unava FROM issue_history WHERE return_date IS NULL GROUP BY book_number) taken ON b.book_number = taken.book_number WHERE b.num_copies - COALESCE(taken.unava, 0) != 0;')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
 
     def getAllAuthors(self):
         curr.execute('select * from authors')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
         
     def getAuthorsOnFirstName(self,x):
         curr.execute('select * from authors where first_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnMiddleName(self,x):
         curr.execute('select * from authors where middle_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnLastName(self,x):
         curr.execute('select * from authors where last_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnID(self,x):
         curr.execute('select * from authors where id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
 
     def getAllMembers(self):
         curr.execute('select * from members')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnFirstName(self,x):
         curr.execute('select * from members where first_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnMiddleName(self,x):
         curr.execute('select * from members where middle_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnLastName(self,x):
         curr.execute('select * from members where last_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnID(self,x):
         curr.execute('select * from members where id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
 
     def getMembersOnAreaName(self,x):
         curr.execute('select * from members where area_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnStreetName(self,x):
         curr.execute('select * from members where street_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnBuildingNo(self,x):
         curr.execute('select * from members where buildingno = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnPhoneNumber(self,x):
         curr.execute('select * from members where phone_number = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnEmail(self,x):
         curr.execute('select * from members where email = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getAllStaff(self):
         curr.execute('select * from staff')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnFirstName(self,x):
         curr.execute('select * from staff where first_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnMiddleName(self,x):
         curr.execute('select * from staff where middle_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnLastName(self,x):
         curr.execute('select * from staff where last_name = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnID(self,x):
         curr.execute('select * from staff where id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnPosition(self,x):
         curr.execute('select * from staff where position = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnPhone(self,x):
         curr.execute('select * from staff where phone_number = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnEmail(self,x):
         curr.execute('select * from staff where email = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getIssue_History(self):
         curr.execute('select * from Issue_History')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnReturnDue(self,x):
         curr.execute('select * from Issue_History where Return_Due = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnReturnDate(self,x):
         curr.execute('select * from Issue_History where Return_Date = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnIssueDate(self,x):
         curr.execute('select * from Issue_History where Issue_Date = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnID(self,x):
         curr.execute('select * from Issue_History where id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryBookNumber(self,x):
         curr.execute('select * from Issue_History where book_number = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnStaffID(self,x):
         curr.execute('select * from Issue_History where staff_id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnMemberID(self,x):
         curr.execute('select * from Issue_History where member_id = ?', (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getOverdueIssues(self,x):
         curr.execute('select * from issue_history where (return_due<SYSDATE and return_date is null) or return_due<return_date;')
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getBooksByAuthor(self,x):
         curr.execute("select b.* from books b, authors a, written_by w where w.author_id =a.id and w.book_number = b.book_number and a.id=?", 
                      (x))
-        return curr.fetchall()
+        return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
 
     def getAuthorOfBook(self,x):
         curr.execute("select b.* from books b, authors a, written_by w where w.author_id =a.id and w.book_number = b.book_number and b.book_number=?", 
                      (x))
-        return curr.fetchall()        
+        return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])        
 
-    def addBook(self,x):
+    def addBook(self,x:Books):
         for book in self.books:
             if book.getID()==x.getID():
                 book.setNumCopies(book.getNumCopies()+1)
@@ -548,23 +548,22 @@ class Library:
         self.books.append(x)
 
 
-    def addAuthor(self,x):            
+    def addAuthor(self,x:Authors):            
         self.authors.append(x)
         
-    def addStaff(self,x):            
+    def addStaff(self,x:Staff):            
         self.staff.append(x)
 
-    def addMember(self,x):            
+    def addMember(self,x:Members):            
         self.members.append(x)
 
-    def addIssueRecord(self,x):            
+    def addIssueRecord(self,x:Issue_History):            
         self.issue_history.append(x)
     
 
+sl.write()    
+    
 
-    
-    
-    
     
 
 
