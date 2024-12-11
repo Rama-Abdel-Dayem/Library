@@ -2,7 +2,6 @@ import sqlite3 as sql
 import itertools
 import numpy as np
 import pandas as pd
-
 import streamlit as sl
 
 conn=sql.Connection('library.db')
@@ -561,7 +560,7 @@ class Library:
         self.issue_history.append(x)
     
 
-sl.write()    
+sl.write('Hello World')    
     
 
     
