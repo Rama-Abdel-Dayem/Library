@@ -334,7 +334,7 @@ class Issue_History:
         self._member_id=member_id
         self._staff_id=staff_id
         conn.execute("INSERT INTO Issue_History (ID, Issuing_Date, Return_Due, Return_Date, Book_Number, Member_ID, Staff_ID) VALUES(?, ?, ?, ?, ?, ?, ?);",
-                     (self.issuing_date,self.return_due,self.return_date,self._book_number,self._member_id,self._staff_id))
+                     (self.id,self.issuing_date,self.return_due,self.return_date,self._book_number,self._member_id,self._staff_id))
 
 
 
