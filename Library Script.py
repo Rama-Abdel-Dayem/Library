@@ -2,7 +2,7 @@ import sqlite3 as sql
 import itertools
 import numpy as np
 import pandas as pd
-import streamlit as sl
+#import streamlit as sl
 
 conn=sql.Connection('library.db')
 
@@ -27,9 +27,10 @@ curr=conn.cursor()
 
 class Books:
     book_number_iter = itertools.count()
-    def __init__(self,title,lang=None,year=None,num_copies=None,publisher=None,authors=None):
+    def __init__(self,title,lang=None,year=None,num_copies=None,publisher=None,authors=None,genre=None):
         self.book_number=next(self.book_number_iter)
 
+        self.genre=genre
         self.title =title 
         self.lang=lang
         self.year_published=year
@@ -42,18 +43,18 @@ class Books:
                 self.authors=authors
                 for author in authors:
                     conn.execute("INSERT INTO Written_By (Author_ID, Book_Number) VALUES (?, ?);",
-                        (self.id,author))
+                        (author,self.book_number))
             else:
                 self.authors.append(authors)
                 conn.execute("INSERT INTO Written_By (Author_ID, Book_Number) VALUES (?, ?);",
-                        (self.id,authors))
+                        (author,self.book_number))
         else:
             self.authors=[]
 
 
 
         conn.execute("INSERT INTO Books (Book_Number, Publisher, Genre, Title, Lang, Num_Copies, Year_Published) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                     (self.title,self.lang,self.year_published,self.num_copies,self.publisher))
+                     (self.book_number,self.publisher,self.genre,self.title,self.lang,self.year_published,self.num_copies))
         
 
 
@@ -62,6 +63,10 @@ class Books:
     def setTitle(self,x):
         self.title=x
         conn.execute('UPDATE Books Set Title = ? where book_number = ?',(self.title,self.book_number))
+
+    def setGenre(self,x):
+        self.title=x
+        conn.execute('UPDATE Books Set genre = ? where book_number = ?',(self.genre,self.book_number))
 
     def setLang(self,x):
         self.lang=x
@@ -83,6 +88,9 @@ class Books:
 #Getters
     def getTitle(self):
         return self.title
+    
+    def getGenre(self):
+        return self.genre
     
     def getLang(self):
         return self.lang
@@ -576,8 +584,67 @@ class Library:
         self.issue_history.append(x)
     
 
-sl.write('Hello World')    
-    
+#sl.write('Hello World')    
+
+
+
+# fake  data
+
+# Initialize Authors
+author1 = Authors(f="John", m="A", l="Doe", lang=["ENG"])
+author2 = Authors(f="Jane", m="B", l="Smith", lang=["ENG"])
+author3 = Authors(f="James", m="C", l="Johnson", lang=["ENG"])
+author4 = Authors(f="Emily", m="D", l="Williams", lang=["ENG"])
+author5 = Authors(f="Michael", m="E", l="Brown", lang=["ENG"])
+
+authors_in_library=[author1,author2,author3,author4,author5]
+
+# Initialize Books
+book1 = Books(title="The Great Adventure", lang="ENG", year="2020-05-12", num_copies=10, publisher="Penguin", authors=[1],genre='Fanasty')
+book2 = Books(title="Science Explained", lang="ENG", year="2018-03-25", num_copies=5, publisher="HarperCollins", authors=[2],genre='Non Fiction')
+book3 = Books(title="Magic World", lang="ENG", year="2015-08-19", num_copies=8, publisher="Macmillan", authors=[3, 1],genre='Fanasty')  # John Doe also wrote this
+book4 = Books(title="Life of a Legend", lang="ENG", year="2019-07-30", num_copies=12, publisher="Random House", authors=[4],genre='Biography')
+book5 = Books(title="Physics for Beginners", lang="ENG", year="2017-09-18", num_copies=7, publisher="Oxford", authors=[5],genre='Non Fiction')
+
+books_in_library=[book1,book2,book3,book4,book5]
+
+
+# Initialize Members
+member1 = Members(f="Alice", l="Green", street="Main St.", m="M", area="Downtown", build="101", email="alice.green@email.com", phone_number="123-456-7890")
+member2 = Members(f="Bob", l="Blue", street="Elm St.", m="N", area="Uptown", build="202", email="bob.blue@email.com", phone_number="234-567-8901")
+member3 = Members(f="Charlie", l="White", street="Oak St.", m="O", area="Suburbs", build="303", email="charlie.white@email.com", phone_number="345-678-9012")
+member4 = Members(f="David", l="Black", street="Pine St.", m="P", area="City Center", build="404", email="david.black@email.com", phone_number="456-789-0123")
+member5 = Members(f="Eve", l="Red", street="Coastal Rd.", m="Q", area="Beachside", build="505", email="eve.red@email.com", phone_number="567-890-1234")
+
+members_in_library=[member1,member2,member3,member4,member5]
+
+
+# Initialize Staff
+staff1 = Staff(f="Sarah", l="Davis", street="Main St.", p="Manager", phone="678-901-2345", email="sarah.davis@email.com")
+staff2 = Staff(f="Tom", l="White", street="Elm St.", p="Assistant", phone="789-012-3456", email="tom.white@email.com")
+staff3 = Staff(f="Linda", l="Miller", street="Oak St.", p="Librarian", phone="890-123-4567", email="linda.miller@email.com")
+staff4 = Staff(f="James", l="Taylor", street="Pine St.", p="Security", phone="901-234-5678", email="james.taylor@email.com")
+staff5 = Staff(f="Sophia", l="Wilson", street="Coastal Rd.", p="Technician", phone="012-345-6789", email="sophia.wilson@email.com")
+
+staff_in_library=[staff1,staff2,staff3,staff4,staff5]
+
+
+# Initialize Issue_History
+issue1 = Issue_History(issue_date="2024-11-01", due_date="2024-11-15", book_num=101, member_id=1, staff_id=3, return_date="2024-11-14")
+issue2 = Issue_History(issue_date="2024-11-05", due_date="2024-11-19", book_num=102, member_id=2, staff_id=4, return_date="2024-11-18")
+issue3 = Issue_History(issue_date="2024-10-20", due_date="2024-11-03", book_num=103, member_id=3, staff_id=2, return_date="2024-11-01")
+issue4 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=104, member_id=4, staff_id=5, return_date="2024-11-23")
+issue5 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date="2024-11-20")
+issue6 = Issue_History(issue_date="2024-10-20", due_date="2024-11-01", book_num=102, member_id=4, staff_id=1, return_date=None)
+issue7 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=102, member_id=3, staff_id=5, return_date=None)
+issue8 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date=None)
+
+issuing_in_library=[issue1,issue2,issue3,issue4,issue5]
+
+
+
+
+
 
     
 
