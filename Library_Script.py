@@ -2,7 +2,7 @@ import sqlite3 as sql
 import itertools
 import numpy as np
 import pandas as pd
-#import streamlit as sl
+import streamlit as st
 
 conn=sql.Connection('library.db')
 
@@ -645,30 +645,96 @@ library=Library(authors=authors_in_library,staff=staff_in_library,members=member
 
 
 
+# Sidebar Navigation
+st.sidebar.title("Library Management")
+page = st.sidebar.selectbox(
+    "Choose an option",
+    ["View Data", "Add New Book", "Add New Author", "Add New Member", "Add New Staff"]
+)
+
+# View Data
+if page == "View Data":
+    st.title("Library Data Viewer")
+    data_type = st.selectbox("Select data to view", ["Books", "Authors", "Members", "Staff", "Issue History"])
     
+    if data_type == "Books":
+        st.write("All Books in the Library:")
+        st.dataframe(library.getAllBooks())
+    
+    elif data_type == "Authors":
+        st.write("All Authors in the Library:")
+        st.dataframe(library.getAllAuthors())
+    
+    elif data_type == "Members":
+        st.write("All Members in the Library:")
+        st.dataframe(library.getAllMembers())
+    
+    elif data_type == "Staff":
+        st.write("All Staff in the Library:")
+        st.dataframe(library.getAllStaff())
+    
+    elif data_type == "Issue History":
+        st.write("Issue History:")
+        st.dataframe(library.getIssue_History())
+
+elif page == "Add New Book":
+    st.title("Add a New Book")
+    title = st.text_input("Title")
+    lang = st.text_input("Language")
+    year = st.number_input("Year Published", min_value=1000, max_value=9999, step=1)
+    num_copies = st.number_input("Number of Copies", min_value=1, step=1)
+    publisher = st.text_input("Publisher")
+    genre = st.text_input("Genre")
+    authors = st.text_input("Author IDs (comma-separated)")
+
+    if st.button("Add Book"):
+        authors_list = [int(a.strip()) for a in authors.split(",")] if authors else None
+        book = Books(title, lang, year, num_copies, publisher, authors_list, genre)
+        library.addBook(book)
+        st.success(f"Book '{title}' added successfully!")
+
+elif page == "Add New Author":
+    st.title("Add a New Author")
+    first_name = st.text_input("First Name")
+    middle_name = st.text_input("Middle Name")
+    last_name = st.text_input("Last Name")
+    lang = st.text_input("Languages Known (comma-separated)")
+
+    if st.button("Add Author"):
+        lang_list = [l.strip() for l in lang.split(",")] if lang else []
+        author = Authors(first_name, middle_name, last_name, lang_list)
+        library.addAuthor(author)
+        st.success(f"Author '{first_name} {last_name}' added successfully!")
+
+elif page == "Add New Member":
+    st.title("Add a New Member")
+    first_name = st.text_input("First Name")
+    middle_name = st.text_input("Middle Name")
+    last_name = st.text_input("Last Name")
+    street = st.text_input("Street Name")
+    area = st.text_input("Area Name")
+    building_no = st.text_input("Building Number")
+    email = st.text_input("Email")
+    phone_number = st.text_input("Phone Number")
+
+    if st.button("Add Member"):
+        member = Members(first_name, last_name, street, middle_name, area, building_no, email, phone_number)
+        library.addMember(member)
+        st.success(f"Member '{first_name} {last_name}' added successfully!")
+
+elif page == "Add New Staff":
+    st.title("Add New Staff")
+    first_name = st.text_input("First Name")
+    middle_name = st.text_input("Middle Name")
+    last_name = st.text_input("Last Name")
+    position = st.text_input("Position")
+    phone_number = st.text_input("Phone Number")
+    email = st.text_input("Email")
+
+    if st.button("Add Staff"):
+        staff = Staff(first_name, last_name, position, phone_number, email, middle_name)
+        library.addStaff(staff)
+        st.success(f"Staff member '{first_name} {last_name}' added successfully!")
 
 
-    
-    
-
-    
-    
-    
-    
-
-
-     
-    
-    
-    
-
-
-      
-    
-
-
-    
-
-
-
-    
+conn.close()
