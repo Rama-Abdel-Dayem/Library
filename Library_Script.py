@@ -640,8 +640,7 @@ issue7 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=
 issue8 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date=None)
 
 issuing_in_library=[issue1,issue2,issue3,issue4,issue5]
-
-
+library=Library(authors=authors_in_library,staff=staff_in_library,members=members_in_library,issue_history=issuing_in_library,books=books_in_library)
 
 
 
