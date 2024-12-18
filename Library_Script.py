@@ -642,10 +642,14 @@ issue8 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=
 issuing_in_library=[issue1,issue2,issue3,issue4,issue5]
 library=Library(authors=authors_in_library,staff=staff_in_library,members=members_in_library,issue_history=issuing_in_library,books=books_in_library)
 
+# temp=Authors('Rama','K','Abdel Dayem')
+
+# library.addAuthor(temp)
+
+# print(library.getAllAuthors())
 
 
-
-# Sidebar Navigation
+#Sidebar Navigation
 st.sidebar.title("Library Management")
 page = st.sidebar.selectbox(
     "Choose an option",
@@ -689,7 +693,7 @@ elif page == "Add New Book":
 
     if st.button("Add Book"):
         authors_list = [int(a.strip()) for a in authors.split(",")] if authors else None
-        book = Books(title, lang, year, num_copies, publisher, authors_list, genre)
+        book = Books(title=title, lang=lang, year=year, num_copies=num_copies, publisher=publisher, authors=authors_list, genre=genre)
         library.addBook(book)
         st.success(f"Book '{title}' added successfully!")
 
@@ -702,7 +706,7 @@ elif page == "Add New Author":
 
     if st.button("Add Author"):
         lang_list = [l.strip() for l in lang.split(",")] if lang else []
-        author = Authors(first_name, middle_name, last_name, lang_list)
+        author = Authors(f=first_name,m= middle_name, l=last_name, lang=lang_list)
         library.addAuthor(author)
         st.success(f"Author '{first_name} {last_name}' added successfully!")
 
@@ -718,7 +722,7 @@ elif page == "Add New Member":
     phone_number = st.text_input("Phone Number")
 
     if st.button("Add Member"):
-        member = Members(first_name, last_name, street, middle_name, area, building_no, email, phone_number)
+        member = Members(f=first_name, l=last_name, street=street, m=middle_name, area=area, build=building_no, email=email, phone_number=phone_number)
         library.addMember(member)
         st.success(f"Member '{first_name} {last_name}' added successfully!")
 
@@ -732,7 +736,7 @@ elif page == "Add New Staff":
     email = st.text_input("Email")
 
     if st.button("Add Staff"):
-        staff = Staff(first_name, last_name, position, phone_number, email, middle_name)
+        staff = Staff(first_name=first_name, last_name=last_name, position=position, phone=phone_number, email=email, middle_name=middle_name)
         library.addStaff(staff)
         st.success(f"Staff member '{first_name} {last_name}' added successfully!")
 
