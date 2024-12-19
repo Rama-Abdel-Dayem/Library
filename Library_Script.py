@@ -3,6 +3,8 @@ import itertools
 import numpy as np
 import pandas as pd
 import streamlit as st
+import datetime as dt
+import time
 
 conn=sql.Connection('library.db')
 
@@ -712,7 +714,7 @@ library=Library()
 st.sidebar.title("Library Management")
 page = st.sidebar.selectbox(
     "Choose an option",
-    ["View Data", "Add New Book", "Add New Author", "Add New Member", "Add New Staff"]
+    ["View Data", "Add Record","Update Record","Delete Record"]
 )
 
 # View Data
@@ -963,64 +965,84 @@ if page == "View Data":
             except KeyError:
                 st.write("No matching reaults found")
 
-elif page == "Add New Book":
-    st.title("Add a New Book")
-    title = st.text_input("Title")
-    lang = st.text_input("Language")
-    year = st.number_input("Year Published", min_value=1000, max_value=9999, step=1)
-    num_copies = st.number_input("Number of Copies", min_value=1, step=1)
-    publisher = st.text_input("Publisher")
-    genre = st.text_input("Genre")
-    authors = st.text_input("Author IDs (comma-separated)")
+elif page == "Add Record":
+    record=st.sidebar.selectbox(
+    "Choose an option",
+    ["Add a New Book", "Add a New Author","Add a New Member","Add New Staff","Borrow a Book"]
+)
+    if record=='Add a New Book':
+        st.title("Add a New Book")
+        title = st.text_input("Title")
+        lang = st.text_input("Language")
+        year = st.number_input("Year Published", min_value=1000, max_value=9999, step=1)
+        num_copies = st.number_input("Number of Copies", min_value=1, step=1)
+        publisher = st.text_input("Publisher")
+        genre = st.text_input("Genre")
+        authors = st.text_input("Author IDs (comma-separated)")
 
-    if st.button("Add Book"):
-        authors_list = [int(a.strip()) for a in authors.split(",")] if authors else None
-        book = Books(title=title, lang=lang, year=year, num_copies=num_copies, publisher=publisher, authors=authors_list, genre=genre)
-        library.addBook(book)
-        st.success(f"Book '{title}' added successfully!")
+        if st.button("Add a New Book"):
+            authors_list = [int(a.strip()) for a in authors.split(",")] if authors else None
+            book = Books(title=title, lang=lang, year=year, num_copies=num_copies, publisher=publisher, authors=authors_list, genre=genre)
+            library.addBook(book)
+            st.success(f"Book '{title}' added successfully!")
 
-elif page == "Add New Author":
-    st.title("Add a New Author")
-    first_name = st.text_input("First Name")
-    middle_name = st.text_input("Middle Name")
-    last_name = st.text_input("Last Name")
-    lang = st.text_input("Languages Known (comma-separated)")
+    elif record == "Add a New Author":
+        st.title("Add a New Author")
+        first_name = st.text_input("First Name")
+        middle_name = st.text_input("Middle Name")
+        last_name = st.text_input("Last Name")
+        lang = st.text_input("Languages Known (comma-separated)")
 
-    if st.button("Add Author"):
-        lang_list = [l.strip() for l in lang.split(",")] if lang else []
-        author = Authors(f=first_name,m= middle_name, l=last_name, lang=lang_list)
-        library.addAuthor(author)
-        st.success(f"Author '{first_name} {last_name}' added successfully!")
+        if st.button("Add a New Author"):
+            lang_list = [l.strip() for l in lang.split(",")] if lang else []
+            author = Authors(f=first_name,m= middle_name, l=last_name, lang=lang_list)
+            library.addAuthor(author)
+            st.success(f"Author '{first_name} {last_name}' added successfully!")
 
-elif page == "Add New Member":
-    st.title("Add a New Member")
-    first_name = st.text_input("First Name")
-    middle_name = st.text_input("Middle Name")
-    last_name = st.text_input("Last Name")
-    street = st.text_input("Street Name")
-    area = st.text_input("Area Name")
-    building_no = st.text_input("Building Number")
-    email = st.text_input("Email")
-    phone_number = st.text_input("Phone Number")
+    elif record == "Add a New Member":
+        st.title("Add a New Member")
+        first_name = st.text_input("First Name")
+        middle_name = st.text_input("Middle Name")
+        last_name = st.text_input("Last Name")
+        street = st.text_input("Street Name")
+        area = st.text_input("Area Name")
+        building_no = st.text_input("Building Number")
+        email = st.text_input("Email")
+        phone_number = st.text_input("Phone Number")
 
-    if st.button("Add Member"):
-        member = Members(f=first_name, l=last_name, street=street, m=middle_name, area=area, build=building_no, email=email, phone_number=phone_number)
-        library.addMember(member)
-        st.success(f"Member '{first_name} {last_name}' added successfully!")
+        if st.button("Add a New Member"):
+            member = Members(f=first_name, l=last_name, street=street, m=middle_name, area=area, build=building_no, email=email, phone_number=phone_number)
+            library.addMember(member)
+            st.success(f"Member '{first_name} {last_name}' added successfully!")
 
-elif page == "Add New Staff":
-    st.title("Add New Staff")
-    first_name = st.text_input("First Name")
-    middle_name = st.text_input("Middle Name")
-    last_name = st.text_input("Last Name")
-    position = st.text_input("Position")
-    phone_number = st.text_input("Phone Number")
-    email = st.text_input("Email")
+    elif record == "Add New Staff":
+        st.title("Add New Staff")
+        first_name = st.text_input("First Name")
+        middle_name = st.text_input("Middle Name")
+        last_name = st.text_input("Last Name")
+        position = st.text_input("Position")
+        phone_number = st.text_input("Phone Number")
+        email = st.text_input("Email")
 
-    if st.button("Add Staff"):
-        staff = Staff(first_name=first_name, last_name=last_name, position=position, phone=phone_number, email=email, middle_name=middle_name)
-        library.addStaff(staff)
-        st.success(f"Staff member '{first_name} {last_name}' added successfully!")
+        if st.button("Add New Staff"):
+            staff = Staff(first_name=first_name, last_name=last_name, position=position, phone=phone_number, email=email, middle_name=middle_name)
+            library.addStaff(staff)
+            st.success(f"Staff member '{first_name} {last_name}' added successfully!")
+
+    elif record == "Borrow a Book":
+        st.title("Borrow a Book")
+        Issue_Date = dt.fromtimestamp(time.time())
+        Due_Return = st.text_input("Due Return: ")
+        Return_Date = st.text_input("Return Date: ")
+        Book_Number = st.text_input("Book Number: ")
+        Member_ID=st.text_input("Member ID: ")
+        StaffID=st.text_input("Staff ID: ")
+
+        if st.button("Borrow a Book"):
+            issue = Issue_History(issue_date=Issue_Date,due_date=Due_Return,member_id=Member_ID,staff_id=StaffID,book_num=Book_Number)
+            library.addIssueRecord(issue)
+            st.success(f"Issuing number {issue.getIssueID()} added successfully!")
+
 
 
 conn.close()
