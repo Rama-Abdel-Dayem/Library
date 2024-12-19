@@ -452,27 +452,27 @@ class Library:
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
     
     def getBooksOnTitle(self,x):
-        curr.execute('select * from books where title = ?',(x))
+        curr.execute('select * from books where title = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnNumber(self,x):
-        curr.execute('select * from books where book_number = ?',(x))
+        curr.execute('select * from books where book_number = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnLang(self,x):
-        curr.execute('select * from books where lang = ?',(x))
+        curr.execute('select * from books where lang = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnGenre(self,x):
-        curr.execute('select * from books where Genre = ?',(x))
+        curr.execute('select * from books where Genre = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnYearPublished(self,x):
-        curr.execute('select * from books where year_published = ?',(x))
+        curr.execute('select * from books where year_published = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getBooksOnPublisher(self,x):
-        curr.execute('select * from books where publisher = ?',(x))
+        curr.execute('select * from books where publisher = ?',(x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
         
     def getAvailableBooks(self):
@@ -485,19 +485,19 @@ class Library:
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
         
     def getAuthorsOnFirstName(self,x):
-        curr.execute('select * from authors where first_name = ?', (x))
+        curr.execute('select * from authors where first_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnMiddleName(self,x):
-        curr.execute('select * from authors where middle_name = ?', (x))
+        curr.execute('select * from authors where middle_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnLastName(self,x):
-        curr.execute('select * from authors where last_name = ?', (x))
+        curr.execute('select * from authors where last_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
     def getAuthorsOnID(self,x):
-        curr.execute('select * from authors where id = ?', (x))
+        curr.execute('select * from authors where id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])
 
 
@@ -506,40 +506,40 @@ class Library:
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnFirstName(self,x):
-        curr.execute('select * from members where first_name = ?', (x))
+        curr.execute('select * from members where first_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnMiddleName(self,x):
-        curr.execute('select * from members where middle_name = ?', (x))
+        curr.execute('select * from members where middle_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnLastName(self,x):
-        curr.execute('select * from members where last_name = ?', (x))
+        curr.execute('select * from members where last_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getMembersOnID(self,x):
-        curr.execute('select * from members where id = ?', (x))
+        curr.execute('select * from members where id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
 
     def getMembersOnAreaName(self,x):
-        curr.execute('select * from members where area_name = ?', (x))
+        curr.execute('select * from members where area_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnStreetName(self,x):
-        curr.execute('select * from members where street_name = ?', (x))
+        curr.execute('select * from members where street_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnBuildingNo(self,x):
-        curr.execute('select * from members where buildingno = ?', (x))
+        curr.execute('select * from members where buildingno = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnPhoneNumber(self,x):
-        curr.execute('select * from members where phone_number = ?', (x))
+        curr.execute('select * from members where phone_number = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
     
     def getMembersOnEmail(self,x):
-        curr.execute('select * from members where email = ?', (x))
+        curr.execute('select * from members where email = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','street_name','area_name','buildingno','phone_number','email'])
 
     def getAllStaff(self):
@@ -547,31 +547,31 @@ class Library:
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnFirstName(self,x):
-        curr.execute('select * from staff where first_name = ?', (x))
+        curr.execute('select * from staff where first_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnMiddleName(self,x):
-        curr.execute('select * from staff where middle_name = ?', (x))
+        curr.execute('select * from staff where middle_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnLastName(self,x):
-        curr.execute('select * from staff where last_name = ?', (x))
+        curr.execute('select * from staff where last_name = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnID(self,x):
-        curr.execute('select * from staff where id = ?', (x))
+        curr.execute('select * from staff where id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnPosition(self,x):
-        curr.execute('select * from staff where position = ?', (x))
+        curr.execute('select * from staff where position = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getStaffOnPhone(self,x):
-        curr.execute('select * from staff where phone_number = ?', (x))
+        curr.execute('select * from staff where phone_number = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
     
     def getStaffOnEmail(self,x):
-        curr.execute('select * from staff where email = ?', (x))
+        curr.execute('select * from staff where email = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name','Position','Phone_Number','Email'])
 
     def getIssue_History(self):
@@ -579,45 +579,46 @@ class Library:
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnReturnDue(self,x):
-        curr.execute('select * from Issue_History where Return_Due = ?', (x))
+        curr.execute('select * from Issue_History where Return_Due = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnReturnDate(self,x):
-        curr.execute('select * from Issue_History where Return_Date = ?', (x))
+        curr.execute('select * from Issue_History where Return_Date = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnIssueDate(self,x):
-        curr.execute('select * from Issue_History where Issue_Date = ?', (x))
+        curr.execute('select * from Issue_History where Issue_Date = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
 
     def getIssue_HistoryOnID(self,x):
-        curr.execute('select * from Issue_History where id = ?', (x))
+        curr.execute('select * from Issue_History where id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryBookNumber(self,x):
-        curr.execute('select * from Issue_History where book_number = ?', (x))
+        curr.execute('select * from Issue_History where book_number = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnStaffID(self,x):
-        curr.execute('select * from Issue_History where staff_id = ?', (x))
+        curr.execute('select * from Issue_History where staff_id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getIssue_HistoryOnMemberID(self,x):
-        curr.execute('select * from Issue_History where member_id = ?', (x))
+        curr.execute('select * from Issue_History where member_id = ?', (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
-    def getOverdueIssues(self,x):
-        curr.execute('select * from issue_history where (return_due<SYSDATE and return_date is null) or return_due<return_date;')
+    def getOverdueIssues(self):
+        #curr.execute('select * from issue_history where (return_due<SYSDATE and return_date is null) or return_due<return_date;')
+        curr.execute("SELECT * FROM issue_history WHERE (return_due < DATE('now') AND return_date IS NULL) OR return_due < return_date;")
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'Issuing_Date', 'Return_Due', 'Return_Date', 'Book_Number', 'Member_ID', 'Staff_ID'])
     
     def getBooksByAuthor(self,x):
         curr.execute("select b.* from books b, authors a, written_by w where w.author_id =a.id and w.book_number = b.book_number and a.id=?", 
-                     (x))
+                     (x,))
         return pd.DataFrame(curr.fetchall(),columns=['Book_Number', 'Publisher', 'Genre', 'Title', 'Lang', 'Num_Copies', 'Year_Published'])
 
     def getAuthorOfBook(self,x):
         curr.execute("select b.* from books b, authors a, written_by w where w.author_id =a.id and w.book_number = b.book_number and b.book_number=?", 
-                     (x))
+                     (x,))
         return pd.DataFrame(curr.fetchall(),columns=['ID', 'First_Name', 'Middle_Name', 'Last_Name'])        
 
     def addBook(self,x:Books):
@@ -722,22 +723,245 @@ if page == "View Data":
     if data_type == "Books":
         st.write("All Books in the Library:")
         st.dataframe(library.getAllBooks())
-    
+        st.write("Choose your Filters")
+        filters = {
+            'Number': st.text_input("Number:"),
+            'Title': st.text_input("Title:"),
+            'Publisher': st.text_input("Publisher:"),
+            'Language': st.text_input("Language:"),
+            'Availability': st.text_input("Availability (T for True, F for False):", max_chars=1),
+            'Genre': st.text_input("Genre:"),
+            'Year of Publication': st.text_input("Year of Publication:")
+        }
+
+        dfs = []
+
+        for key, value in filters.items():
+            if value:
+                value = str(value).strip() 
+                print(value)
+                if key == 'Number':
+                    dfs.append(library.getBooksOnNumber((value)))
+                elif key == 'Title':
+                    dfs.append(library.getBooksOnTitle(value)) 
+                elif key == 'Publisher':
+                    dfs.append(library.getBooksOnPublisher(value))
+                elif key == 'Language':
+                    dfs.append(library.getBooksOnLang(value))
+                elif key == 'Availability' and value.upper() in ['T', 'F']:
+                    if value.upper() == 'T':
+                        dfs.append(library.getAvailableBooks())
+                elif key == 'Genre':
+                    dfs.append(library.getBooksOnGenre(value))
+                elif key == 'Year of Publication':
+                    dfs.append(library.getBooksOnYearPublished(value))
+
+        if len(dfs) == 1:
+            st.dataframe(dfs[0])
+        elif len(dfs) > 1:
+            merged_df = dfs[0]
+            for df in dfs[1:]:
+                merged_df = pd.merge(merged_df, df)
+            try:
+                st.dataframe(merged_df)  
+            except KeyError:
+                st.write("No matching reaults found")
+        else:
+            st.write("No filters applied")      
+            
     elif data_type == "Authors":
         st.write("All Authors in the Library:")
         st.dataframe(library.getAllAuthors())
+        st.write("Choose your Filters")
+        filters = {
+            'ID': st.text_input("ID:"),
+            'First Name': st.text_input("First Name:"),
+            'Middle Name': st.text_input("Middle Name:"),
+            'Last Name': st.text_input("Last Name:")
+        }
+
+        dfs = []
+
+        for key, value in filters.items():
+            if value:
+                value = str(value).strip() 
+                print(value)
+                if key == 'ID':
+                    dfs.append(library.getAuthorsOnID((value)))
+                elif key == 'First Name':
+                    dfs.append(library.getAuthorsOnFirstName(value)) 
+                elif key == 'Middle Name':
+                    dfs.append(library.getAuthorsOnMiddleName(value))
+                elif key == 'Last Name':
+                    dfs.append(library.getAuthorsOnLastName(value))
+
+        if len(dfs) == 1:
+            st.dataframe(dfs[0])
+        elif len(dfs) > 1:
+            merged_df = dfs[0]
+            for df in dfs[1:]:
+                merged_df = pd.merge(merged_df, df)
+            try:
+                st.dataframe(merged_df)  
+            except KeyError:
+                st.write("No matching reaults found")
+        else:
+            st.write("No filters applied")
     
     elif data_type == "Members":
         st.write("All Members in the Library:")
         st.dataframe(library.getAllMembers())
+
+        st.write("Choose your Filters")
+        filters = {
+            'ID': st.text_input("ID:"),
+            'First Name': st.text_input("First Name:"),
+            'Middle Name': st.text_input("Middle Name:"),
+            'Last Name': st.text_input("Last Name:"),
+            'Area': st.text_input("Area:"),
+            'Street': st.text_input("Street:"),
+            'Building No': st.text_input("Building No:"),
+            'Email': st.text_input("Email:"),
+            'Phone Number': st.text_input("Phone Number:")
+        }
+
+        dfs = []
+
+        for key, value in filters.items():
+            if value:
+                value = str(value).strip() 
+                print(value)
+                if key == 'ID':
+                    dfs.append(library.getMembersOnID((value)))
+                elif key == 'First Name':
+                    dfs.append(library.getMembersOnFirstName(value)) 
+                elif key == 'Middle Name':
+                    dfs.append(library.getMembersOnMiddleName(value))
+                elif key == 'Last Name':
+                    dfs.append(library.getMembersOnLastName(value))
+                elif key == 'Area':
+                    dfs.append(library.getMembersOnAreaName((value)))
+                elif key == 'Street':
+                    dfs.append(library.getMembersOnStreetName(value)) 
+                elif key == 'Building No':
+                    dfs.append(library.getMembersOnBuildingNo(value))
+                elif key == 'Email':
+                    dfs.append(library.getMembersOnEmail(value))
+                elif key == 'Phone Number':
+                    dfs.append(library.getMembersOnPhoneNumber(value))
+
+        if len(dfs) == 1:
+            st.dataframe(dfs[0])
+        elif len(dfs) > 1:
+            merged_df = dfs[0]
+            for df in dfs[1:]:
+                merged_df = pd.merge(merged_df, df)
+            try:
+                st.dataframe(merged_df)  
+            except KeyError:
+                st.write("No matching results found")
+        else:
+            st.write("No filters applied")
     
     elif data_type == "Staff":
         st.write("All Staff in the Library:")
         st.dataframe(library.getAllStaff())
+
+        st.write("Choose your Filters")
+        filters = {
+            'ID': st.text_input("ID:"),
+            'First Name': st.text_input("First Name:"),
+            'Middle Name': st.text_input("Middle Name:"),
+            'Last Name': st.text_input("Last Name:"),
+            'Role': st.text_input("Role:"),
+            'Email': st.text_input("Email:"),
+            'Phone Number': st.text_input("Phone Number:")
+        }
+
+        dfs = []
+
+        for key, value in filters.items():
+            if value:
+                value = str(value).strip() 
+                print(value)
+                if key == 'ID':
+                    dfs.append(library.getStaffOnID((value)))
+                elif key == 'First Name':
+                    dfs.append(library.getStaffOnFirstName(value)) 
+                elif key == 'Middle Name':
+                    dfs.append(library.getStaffOnMiddleName(value))
+                elif key == 'Last Name':
+                    dfs.append(library.getStaffOnLastName(value))
+                elif key == 'Role':
+                    dfs.append(library.getStaffOnPosition((value)))
+                elif key == 'Email':
+                    dfs.append(library.getStaffOnEmail(value))
+                elif key == 'Phone Number':
+                    dfs.append(library.getStaffOnPhone(value))
+
+        if len(dfs) == 1:
+            st.dataframe(dfs[0])
+        elif len(dfs) > 1:
+            merged_df = dfs[0]
+            for df in dfs[1:]:
+                merged_df = pd.merge(merged_df, df)
+            try:
+                st.dataframe(merged_df)  
+            except KeyError:
+                st.write("No matching reaults found")
+        else:
+            st.write("No filters applied")
     
     elif data_type == "Issue History":
         st.write("Issue History:")
         st.dataframe(library.getIssue_History())
+
+        st.write("Choose your Filters")
+        filters = {
+            'ID': st.text_input("ID:"),
+            'Issue Date': st.text_input("Issue Date:"),
+            'Due Date': st.text_input("Due Date:"),
+            'Return Date': st.text_input("Return Date:"),
+            'Member ID': st.text_input("Member ID:"),
+            'Staff ID': st.text_input("Staff ID:"),
+            'Book Number': st.text_input("Book Number:"),
+            'Overdue': st.text_input("Overdue (T for True, F for False):", max_chars=1)
+        }
+
+        dfs = []
+
+        for key, value in filters.items():
+            if value:
+                value = str(value).strip() 
+                print(value)
+                if key == 'ID':
+                    dfs.append(library.getIssue_HistoryOnID((value)))
+                elif key == 'Issue Date':
+                    dfs.append(library.getIssue_HistoryOnIssueDate(value)) 
+                elif key == 'Due Date':
+                    dfs.append(library.getIssue_HistoryOnReturnDue(value))
+                elif key == 'Return Date':
+                    dfs.append(library.getIssue_HistoryOnReturnDate(value))
+                elif key == 'Overdue' and value.upper() in ['T', 'F']:
+                    if value.upper() == 'T':
+                        dfs.append(library.getOverdueIssues())
+                elif key == 'Member ID':
+                    dfs.append(library.getIssue_HistoryOnMemberID(value))
+                elif key == 'Staff ID':
+                    dfs.append(library.getIssue_HistoryOnStaffID(value))
+                elif key == 'Book Number':
+                    dfs.append(library.getIssue_HistoryBookNumber(value))
+
+        if len(dfs) == 1:
+            st.dataframe(dfs[0])
+        elif len(dfs) > 1:
+            merged_df = dfs[0]
+            for df in dfs[1:]:
+                merged_df = pd.merge(merged_df, df)
+            try:
+                st.dataframe(merged_df)  
+            except KeyError:
+                st.write("No matching reaults found")
 
 elif page == "Add New Book":
     st.title("Add a New Book")
