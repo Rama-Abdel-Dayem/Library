@@ -10,18 +10,17 @@ conn=sql.Connection('library.db')
 
 curr=conn.cursor()
 
-# curr.execute("create table Books(Book_Number int Primary Key,Publisher Varchar(50) ,Genre Varchar(15),Title Varchar(50) not null,Lang char(3) not null, Num_Copies int not null,Year_Published date);")
+curr.execute("create table Books(Book_Number int Primary Key,Publisher Varchar(50) ,Genre Varchar(15),Title Varchar(50) not null,Lang char(3) not null, Num_Copies int not null,Year_Published date);")
 
 
-# curr.execute("create table Authors(ID int Primary Key,First_Name Varchar(50),Middle_Name Varchar(50),Last_Name Varchar(50));")
+curr.execute("create table Authors(ID int Primary Key,First_Name Varchar(50),Middle_Name Varchar(50),Last_Name Varchar(50));")
 
-# curr.execute("create table Written_By(Author_ID int,Book_Number int,constraint written_by_pk Primary Key (Author_ID,Book_Number),constraint written_by_authorFK Foreign Key (Author_ID) References Authors,constraint written_by_BookFK Foreign Key (Book_Number) References Books);")
+curr.execute("create table Written_By(Author_ID int,Book_Number int,constraint written_by_pk Primary Key (Author_ID,Book_Number),constraint written_by_authorFK Foreign Key (Author_ID) References Authors,constraint written_by_BookFK Foreign Key (Book_Number) References Books);")
+curr.execute("create table Members(ID int Primary Key,Phone_Number varchar(15),First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50) not null,Area_Name varchar(50),Street_Name varchar(50) not null,BuildingNo varchar(5),Email Varchar(50));")
 
-# curr.execute("create table Members(ID int Primary Key,Phone_Number varchar(15),First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50) not null,Area_Name varchar(50),Street_Name varchar(50) not null,BuildingNo varchar(5),Email Varchar(50));")
-
-# curr.execute("create table Staff(ID int primary key,First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50)  not null,Position Varchar(50) not null,Phone_Number varchar(15),Email Varchar(50));")
-# curr.execute("create table Issue_History(ID int primary key,Issuing_Date Date,Return_Due Date,Return_Date Date,Book_Number int,Member_ID int,Staff_ID int,constraint Issue_History_Book_fk Foreign Key (Book_Number) References Books,constraint Issue_History_member_fk Foreign Key (Member_ID) References Members,constraint Issue_History_Staff_fk Foreign Key (Staff_ID) References Staff );")
-# curr.execute("create table languages(author_id int,lang char(3),constraint lang_author_if foreign key (author_id) references authors(id),constraint pk_lanuages primary key (author_id,lang));")
+curr.execute("create table Staff(ID int primary key,First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50)  not null,Position Varchar(50) not null,Phone_Number varchar(15),Email Varchar(50));")
+curr.execute("create table Issue_History(ID int primary key,Issuing_Date Date,Return_Due Date,Return_Date Date,Book_Number int,Member_ID int,Staff_ID int,constraint Issue_History_Book_fk Foreign Key (Book_Number) References Books,constraint Issue_History_member_fk Foreign Key (Member_ID) References Members,constraint Issue_History_Staff_fk Foreign Key (Staff_ID) References Staff );")
+curr.execute("create table languages(author_id int,lang char(3),constraint lang_author_if foreign key (author_id) references authors(id),constraint pk_lanuages primary key (author_id,lang));")
 
 
 class Books:
@@ -1241,270 +1240,59 @@ elif page == "Update Record":
     data_type = st.selectbox("Select data to view", ["Books", "Authors", "Members", "Staff", "Issue History"])
 
     if data_type == "Books":
-        st.write("Please enter some details of the book that you want to update:")
+        id = st.text_input("Please enter the Number of the book (If you do not know refer to the veiw data section)")
 
-        filters = {
-            'Number': st.text_input("Number:"),
-            'Title': st.text_input("Title:"),
-            'Publisher': st.text_input("Publisher:"),
-            'Language': st.text_input("Language:"),
-            'Availability': st.text_input("Availability (T for True, F for False):", max_chars=1),
-            'Genre': st.text_input("Genre:"),
-            'Year of Publication': st.text_input("Year of Publication:")
-        }
+        st.write("What changes do you want to make?")
 
-        merged_df = None
+        changes = {
+                'Number': st.text_input("New Number:"),
+                'Title': st.text_input("New Title:"),
+                'Publisher': st.text_input("New Publisher:"),
+                'Language': st.text_input("New Language:"),
+                'Number Of Copies': st.text_input("New Number of Copies:"),
+                'Genre': st.text_input("New Genre:"),
+                'Year of Publication': st.text_input("New Year of Publication:")
+            }
 
-        dfs = []
-
-        for key, value in filters.items():
-            if value:
-                value = str(value).strip()
-                if key == 'Number':
-                    dfs.append(library.getBooksOnNumber(value))
-                elif key == 'Title':
-                    dfs.append(library.getBooksOnTitle(value))
-                elif key == 'Publisher':
-                    dfs.append(library.getBooksOnPublisher(value))
-                elif key == 'Language':
-                    dfs.append(library.getBooksOnLang(value))
-                elif key == 'Availability' and value.upper() in ['T', 'F']:
-                    if value.upper() == 'T':
-                        dfs.append(library.getAvailableBooks())
-                elif key == 'Genre':
-                    dfs.append(library.getBooksOnGenre(value))
-                elif key == 'Year of Publication':
-                    dfs.append(library.getBooksOnYearPublished(value))
-
-            if len(dfs) == 1:
-                merged_df=dfs[0]
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-        st.dataframe(merged_df.drop_duplicates())
-
-        conformation=st.text_input("Enter Yes or No")
-
-        if conformation.lower()=='yes':
-            st.write("Please enter what you want to update, leave the things you want to stay the same empty")
-
-            changes = {
-            'Title': st.text_input("New Title:"),
-            'Publisher': st.text_input("New Publisher:"),
-            'Language': st.text_input("New Language:"),
-            'Genre': st.text_input("New Genre:"),
-            'Year of Publication': st.text_input("New Year of Publication:")
-        }
-
-
-            for id in merged_df['Number']:
-                library.update_Book(library.books[id],changes)
-
-
-        
+        library.update_Book(id,changes)     
 
     if data_type == "Authors":
-        st.write("Please enter some details of the author that you want to update:")
+        id = st.text_input("Please enter the Author ID (If you do not know refer to the view data section)")
 
-        filters = {
-            'ID': st.text_input("ID:"),
-            'First Name': st.text_input("First Name:"),
-            'Middle Name': st.text_input("Middle Name:"),
-            'Last Name': st.text_input("Last Name:"),
-            'Language': st.text_input("Language:")
-        }
 
-        temp = None
+        st.write("Enter new values for the author (leave blank to retain existing values):")
+        changes = {
+            'First Name': st.text_input("New First Name:"),
+            'Middle Name': st.text_input("New Middle Name:"),
+            'Last Name': st.text_input("New Last Name:"),
+            'Language': st.text_input("New Language:")
+            }
 
-        if filters['ID']:
-            temp = list(library.authors[int(filters['ID'])])
-            st.dataframe(library.getAuthorsOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'First Name':
-                        dfs.append(library.getAuthorsOnFirstName(value))
-                    elif key == 'Middle Name':
-                        dfs.append(library.getAuthorsOnMiddleName(value))
-                    elif key == 'Last Name':
-                        dfs.append(library.getAuthorsOnLastName(value))
-                    elif key == 'ID':
-                        dfs.append(library.getAuthorsOnID(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            st.write("Enter new values for the author (leave blank to retain existing values):")
-            changes = {
-                'First Name': st.text_input("New First Name:"),
-                'Middle Name': st.text_input("New Middle Name:"),
-                'Last Name': st.text_input("New Last Name:"),
-                'Language': st.text_input("New Language:")
-                }
-
-            if temp is not None:
-                for id in temp['ID']:
-                    library.update_Author(library.authors[id], changes)
-                st.success("Records updated successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.update_Author(id,changes)
 
     if data_type == "Members":
-        st.write("Please enter some details of the member that you want to update:")
+        id = st.text_input("Please enter the Member ID (If you do not know refer to the view data section)")
 
-        filters = {
-            'ID': st.text_input("ID:"),
-            'First Name': st.text_input("First Name:"),
-            'Middle Name': st.text_input("Middle Name:"),
-            'Last Name': st.text_input("Last Name:"),
-            'Area': st.text_input("Area:"),
-            'Street': st.text_input("Street:"),
-            'Building Number': st.text_input("Building Number:"),
-            'Phone Number': st.text_input("Phone Number:"),
-            'Email': st.text_input("Email:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.members[int(filters['ID'])])
-            st.dataframe(library.getMembersOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'First Name':
-                        dfs.append(library.getMembersOnFirstName(value))
-                    elif key == 'Middle Name':
-                        dfs.append(library.getMembersOnMiddleName(value))
-                    elif key == 'Last Name':
-                        dfs.append(library.getMembersOnLastName(value))
-                    elif key == 'Area':
-                        dfs.append(library.getMembersOnAreaName(value))
-                    elif key == 'Street':
-                        dfs.append(library.getMembersOnStreetName(value))
-                    elif key == 'Building Number':
-                        dfs.append(library.getMembersOnBuildingNo(value))
-                    elif key == 'Email':
-                        dfs.append(library.getMembersOnEmail(value))
-                    elif key == 'Phone Number':
-                        dfs.append(library.getMembersOnPhoneNumber(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            st.write("Enter new values for the member (leave blank to retain existing values):")
-            changes = {
-                'First Name': st.text_input("New First Name:"),
-                'Middle Name': st.text_input("New Middle Name:"),
-                'Last Name': st.text_input("New Last Name:"),
-                'Area': st.text_input("New Area:"),
-                'Street': st.text_input("New Street:"),
-                'Building Number': st.text_input("New Building Number:"),
-                'Phone Number': st.text_input("New Phone Number:"),
-                'Email': st.text_input("New Email:")
+        
+        st.write("Enter new values for the member (leave blank to retain existing values):")
+        changes = {
+            'First Name': st.text_input("New First Name:"),
+            'Middle Name': st.text_input("New Middle Name:"),
+            'Last Name': st.text_input("New Last Name:"),
+            'Area': st.text_input("New Area:"),
+            'Street': st.text_input("New Street:"),
+            'Building Number': st.text_input("New Building Number:"),
+            'Phone Number': st.text_input("New Phone Number:"),
+            'Email': st.text_input("New Email:")
                 }
 
-            if temp is not None:
-                for id in temp['ID']:
-                    library.update_Member(library.members[id], changes)
-                st.success("Records updated successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.update_Member(id,changes)
 
     if data_type == "Staff":
-        st.write("Please enter some details of the staff that you want to update:")
+        id = st.text_input("Please enter the Staff ID (If you do not know refer to the view data section)")
 
-        filters = {
-            'ID': st.text_input("ID:"),
-            'First Name': st.text_input("First Name:"),
-            'Middle Name': st.text_input("Middle Name:"),
-            'Last Name': st.text_input("Last Name:"),
-            'Position': st.text_input("Position:"),
-            'Phone Number': st.text_input("Phone Number:"),
-            'Email': st.text_input("Email:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.staff[int(filters['ID'])])
-            st.dataframe(library.getStaffOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'First Name':
-                        dfs.append(library.getStaffOnFirstName(value))
-                    elif key == 'Middle Name':
-                        dfs.append(library.getStaffOnMiddleName(value))
-                    elif key == 'Last Name':
-                        dfs.append(library.getStaffOnLastName(value))
-                    elif key == 'Position':
-                        dfs.append(library.getStaffOnPosition(value))
-                    elif key == 'Email':
-                        dfs.append(library.getStaffOnEmail(value))
-                    elif key == 'Phone Number':
-                        dfs.append(library.getStaffOnPhone(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            st.write("Enter new values for the staff (leave blank to retain existing values):")
-            changes = {
+        st.write("Enter new values for the staff (leave blank to retain existing values):")
+        changes = {
                 'First Name': st.text_input("New First Name:"),
                 'Middle Name': st.text_input("New Middle Name:"),
                 'Last Name': st.text_input("New Last Name:"),
@@ -1513,375 +1301,48 @@ elif page == "Update Record":
                 'Email': st.text_input("New Email:")
                 }
 
-            if temp is not None:
-                for id in temp['ID']:
-                    library.update_Staff(library.staff[id], changes)
-                st.success("Records updated successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.update_Staff(id,changes)
 
     if data_type == "Issue History":
-        st.write("Please enter some details of the staff that you want to update:")
+        id = st.text_input("Please enter the Author ID (If you do not know refer to the view data section)")
 
-        filters = {
-            'ID': st.text_input("Issuing ID:"),
-            'Issuing Date': st.text_input("Issuing Date:"),
-            'Return Date': st.text_input("Return Date:"),
-            'Return Due': st.text_input("Return Due:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.issue_history[int(filters['ID'])])
-            st.dataframe(library.getIssue_HistoryOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'Issuing Date':
-                        dfs.append(library.getIssue_HistoryOnIssueDate(value))
-                    elif key == 'Return Date':
-                        dfs.append(library.getIssue_HistoryOnReturnDate(value))
-                    elif key == 'Return Due':
-                        dfs.append(library.getIssue_HistoryOnReturnDue(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            st.write("Enter new values for the issue (leave blank to retain existing values):")
-            changes = {
+       
+        st.write("Enter new values for the issue (leave blank to retain existing values):")
+        changes = {
                 'Issuing Date': st.text_input("New Issuing Date:"),
                 'Return Date': st.text_input("New Return Date:"),
                 'Return Due': st.text_input("New Return Due:")
                 }
 
-            if temp is not None:
-                for id in temp['ID']:
-                    library.update_Issuing(library.issue_history[id], changes)
-                st.success("Records updated successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.update_Issuing(id,changes)
 
 elif page == "Delete Record":
     st.title("Delete A Record")
     data_type = st.selectbox("Select data to view", ["Books", "Authors", "Members", "Staff", "Issue History"])
 
     if data_type == "Books":
-        st.write("Please enter some details of the book that you want to delete:")
+        id = st.text_input("Please enter the Number of the book (If you do not know refer to the veiw data section)")
 
-        filters = {
-            'Number': st.text_input("Number:"),
-            'Title': st.text_input("Title:"),
-            'Publisher': st.text_input("Publisher:"),
-            'Language': st.text_input("Language:"),
-            'Availability': st.text_input("Availability (T for True, F for False):", max_chars=1),
-            'Genre': st.text_input("Genre:"),
-            'Year of Publication': st.text_input("Year of Publication:")
-        }
-
-        temp = None
-
-        if filters['Number']:
-            temp = list(library.books[filters['Number']])
-            st.dataframe(library.getBooksOnNumber(filters['Number']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'Number':
-                        dfs.append(library.getBooksOnNumber(value))
-                    elif key == 'Title':
-                        dfs.append(library.getBooksOnTitle(value))
-                    elif key == 'Publisher':
-                        dfs.append(library.getBooksOnPublisher(value))
-                    elif key == 'Language':
-                        dfs.append(library.getBooksOnLang(value))
-                    elif key == 'Availability' and value.upper() in ['T', 'F']:
-                        if value.upper() == 'T':
-                            dfs.append(library.getAvailableBooks())
-                    elif key == 'Genre':
-                        dfs.append(library.getBooksOnGenre(value))
-                    elif key == 'Year of Publication':
-                        dfs.append(library.getBooksOnYearPublished(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            if temp is not None:
-                for id in temp['Number']:
-                    library.delete_Book(id)
-                st.success("Records deleted successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.delete_Book(id)
 
     if data_type == "Authors":
-        st.write("Please enter some details of the author that you want to delete:")
+        id = st.text_input("Please enter the Author ID (If you do not know refer to the veiw data section)")
 
-        filters = {
-            'ID': st.text_input("ID:"),
-            'First Name': st.text_input("First Name:"),
-            'Middle Name': st.text_input("Middle Name:"),
-            'Last Name': st.text_input("Last Name:"),
-            'Language': st.text_input("Language:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.authors[int(filters['ID'])])
-            st.dataframe(library.getAuthorsOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'First Name':
-                        dfs.append(library.getAuthorsOnFirstName(value))
-                    elif key == 'Middle Name':
-                        dfs.append(library.getAuthorsOnMiddleName(value))
-                    elif key == 'Last Name':
-                        dfs.append(library.getAuthorsOnLastName(value))
-                    elif key == 'ID':
-                        dfs.append(library.getAuthorsOnID(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-            if temp is not None:
-                for id in temp['ID']:
-                    library.delete_Author(id)
-                st.success("Records deleted successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.delete_Author(id)
 
     if data_type == "Members":
-        st.write("Please enter some details of the member that you want to delete:")
+       id = st.text_input("Please enter the Member ID (If you do not know refer to the veiw data section)")
 
-        filters = {
-            'ID': st.text_input("ID:"),
-            'First Name': st.text_input("First Name:"),
-            'Middle Name': st.text_input("Middle Name:"),
-            'Last Name': st.text_input("Last Name:"),
-            'Area': st.text_input("Area:"),
-            'Street': st.text_input("Street:"),
-            'Building Number': st.text_input("Building Number:"),
-            'Phone Number': st.text_input("Phone Number:"),
-            'Email': st.text_input("Email:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.members[int(filters['ID'])])
-            st.dataframe(library.getMembersOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'First Name':
-                        dfs.append(library.getMembersOnFirstName(value))
-                    elif key == 'Middle Name':
-                        dfs.append(library.getMembersOnMiddleName(value))
-                    elif key == 'Last Name':
-                        dfs.append(library.getMembersOnLastName(value))
-                    elif key == 'Area':
-                        dfs.append(library.getMembersOnAreaName(value))
-                    elif key == 'Street':
-                        dfs.append(library.getMembersOnStreetName(value))
-                    elif key == 'Building Number':
-                        dfs.append(library.getMembersOnBuildingNo(value))
-                    elif key == 'Email':
-                        dfs.append(library.getMembersOnEmail(value))
-                    elif key == 'Phone Number':
-                        dfs.append(library.getMembersOnPhoneNumber(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching resaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to update?")
-
-        if st.button('Yes'):
-           
-            if temp is not None:
-                for id in temp['ID']:
-                    library.delete_Member(id)
-                st.success("Records deleted successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+       library.delete_Member(id)
 
     if data_type == "Staff":
-            st.write("Please enter some details of the staff that you want to delete:")
+        id = st.text_input("Please enter the Staff ID (If you do not know refer to the veiw data section)")
 
-            filters = {
-                'ID': st.text_input("ID:"),
-                'First Name': st.text_input("First Name:"),
-                'Middle Name': st.text_input("Middle Name:"),
-                'Last Name': st.text_input("Last Name:"),
-                'Position': st.text_input("Position:"),
-                'Phone Number': st.text_input("Phone Number:"),
-                'Email': st.text_input("Email:")
-            }
-
-            temp = None
-
-            if filters['ID']:
-                temp = list(library.staff[int(filters['ID'])])
-                st.dataframe(library.getStaffOnID(filters['ID']))
-            else:
-                dfs = []
-
-                for key, value in filters.items():
-                    if value:
-                        value = str(value).strip()
-                        if key == 'First Name':
-                            dfs.append(library.getStaffOnFirstName(value))
-                        elif key == 'Middle Name':
-                            dfs.append(library.getStaffOnMiddleName(value))
-                        elif key == 'Last Name':
-                            dfs.append(library.getStaffOnLastName(value))
-                        elif key == 'Position':
-                            dfs.append(library.getStaffOnPosition(value))
-                        elif key == 'Email':
-                            dfs.append(library.getStaffOnEmail(value))
-                        elif key == 'Phone Number':
-                            dfs.append(library.getStaffOnPhone(value))
-
-                if len(dfs) == 1:
-                    st.dataframe(dfs[0])
-                elif len(dfs) > 1:
-                    merged_df = dfs[0]
-                    for df in dfs[1:]:
-                        merged_df = pd.merge(merged_df, df)
-                    try:
-                        st.dataframe(merged_df)  
-                    except KeyError:
-                        st.write("No matching reaults found")
-                else:
-                    st.write("No filters applied")
-
-            st.write("Are these the records you want to delete?")
-
-            if st.button('Yes'):
-                if temp is not None:
-                    for id in temp['ID']:
-                        library.delete_Staff(id)
-                    st.success("Records delete successfully!")
-
-            elif st.button('No'):
-                st.write("Please change the filters and try again.")
+        library.delete_Staff(id)
 
     if data_type == "Issue History":
-        st.write("Please enter some details of the staff that you want to delete:")
+        id = st.text_input("Please enter the Issue ID (If you do not know refer to the veiw data section)")
 
-        filters = {
-            'ID': st.text_input("Issuing ID:"),
-            'Issuing Date': st.text_input("Issuing Date:"),
-            'Return Date': st.text_input("Return Date:"),
-            'Return Due': st.text_input("Return Due:")
-        }
-
-        temp = None
-
-        if filters['ID']:
-            temp = list(library.issue_history[int(filters['ID'])])
-            st.dataframe(library.getIssue_HistoryOnID(filters['ID']))
-        else:
-            dfs = []
-
-            for key, value in filters.items():
-                if value:
-                    value = str(value).strip()
-                    if key == 'Issuing Date':
-                        dfs.append(library.getIssue_HistoryOnIssueDate(value))
-                    elif key == 'Return Date':
-                        dfs.append(library.getIssue_HistoryOnReturnDate(value))
-                    elif key == 'Return Due':
-                        dfs.append(library.getIssue_HistoryOnReturnDue(value))
-
-            if len(dfs) == 1:
-                st.dataframe(dfs[0])
-            elif len(dfs) > 1:
-                merged_df = dfs[0]
-                for df in dfs[1:]:
-                    merged_df = pd.merge(merged_df, df)
-                try:
-                    st.dataframe(merged_df)  
-                except KeyError:
-                    st.write("No matching reaults found")
-            else:
-                st.write("No filters applied")
-
-        st.write("Are these the records you want to delete?")
-
-        if st.button('Yes'):
-            if temp is not None:
-                for id in temp['ID']:
-                    library.delete_Issue(id)
-                st.success("Records deleted successfully!")
-
-        elif st.button('No'):
-            st.write("Please change the filters and try again.")
+        library.delete_Issue(id)
 
 conn.close()
