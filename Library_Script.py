@@ -10,17 +10,17 @@ conn=sql.Connection('library.db')
 
 curr=conn.cursor()
 
-curr.execute("create table Books(Book_Number int Primary Key,Publisher Varchar(50) ,Genre Varchar(15),Title Varchar(50) not null,Lang char(3) not null, Num_Copies int not null,Year_Published date);")
+# curr.execute("create table Books(Book_Number int Primary Key,Publisher Varchar(50) ,Genre Varchar(15),Title Varchar(50) not null,Lang char(3) not null, Num_Copies int not null,Year_Published date);")
 
 
-curr.execute("create table Authors(ID int Primary Key,First_Name Varchar(50),Middle_Name Varchar(50),Last_Name Varchar(50));")
+# curr.execute("create table Authors(ID int Primary Key,First_Name Varchar(50),Middle_Name Varchar(50),Last_Name Varchar(50));")
 
-curr.execute("create table Written_By(Author_ID int,Book_Number int,constraint written_by_pk Primary Key (Author_ID,Book_Number),constraint written_by_authorFK Foreign Key (Author_ID) References Authors,constraint written_by_BookFK Foreign Key (Book_Number) References Books);")
-curr.execute("create table Members(ID int Primary Key,Phone_Number varchar(15),First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50) not null,Area_Name varchar(50),Street_Name varchar(50) not null,BuildingNo varchar(5),Email Varchar(50));")
+# curr.execute("create table Written_By(Author_ID int,Book_Number int,constraint written_by_pk Primary Key (Author_ID,Book_Number),constraint written_by_authorFK Foreign Key (Author_ID) References Authors,constraint written_by_BookFK Foreign Key (Book_Number) References Books);")
+# curr.execute("create table Members(ID int Primary Key,Phone_Number varchar(15),First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50) not null,Area_Name varchar(50),Street_Name varchar(50) not null,BuildingNo varchar(5),Email Varchar(50));")
 
-curr.execute("create table Staff(ID int primary key,First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50)  not null,Position Varchar(50) not null,Phone_Number varchar(15),Email Varchar(50));")
-curr.execute("create table Issue_History(ID int primary key,Issuing_Date Date,Return_Due Date,Return_Date Date,Book_Number int,Member_ID int,Staff_ID int,constraint Issue_History_Book_fk Foreign Key (Book_Number) References Books,constraint Issue_History_member_fk Foreign Key (Member_ID) References Members,constraint Issue_History_Staff_fk Foreign Key (Staff_ID) References Staff );")
-curr.execute("create table languages(author_id int,lang char(3),constraint lang_author_if foreign key (author_id) references authors(id),constraint pk_lanuages primary key (author_id,lang));")
+# curr.execute("create table Staff(ID int primary key,First_Name Varchar(50) not null, Middle_Name Varchar(50), Last_Name Varchar(50)  not null,Position Varchar(50) not null,Phone_Number varchar(15),Email Varchar(50));")
+# curr.execute("create table Issue_History(ID int primary key,Issuing_Date Date,Return_Due Date,Return_Date Date,Book_Number int,Member_ID int,Staff_ID int,constraint Issue_History_Book_fk Foreign Key (Book_Number) References Books,constraint Issue_History_member_fk Foreign Key (Member_ID) References Members,constraint Issue_History_Staff_fk Foreign Key (Staff_ID) References Staff );")
+# curr.execute("create table languages(author_id int,lang char(3),constraint lang_author_if foreign key (author_id) references authors(id),constraint pk_lanuages primary key (author_id,lang));")
 
 
 class Books:
@@ -894,6 +894,8 @@ issuing_in_library={
 }
 
 library=Library(books=books_in_library,authors=authors_in_library,staff=staff_in_library,issue_history=issuing_in_library,members=members_in_library)
+
+
 
 # temp=Authors('Rama','K','Abdel Dayem')
 
