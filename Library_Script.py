@@ -1253,10 +1253,10 @@ elif page == "Update Record":
             'Year of Publication': st.text_input("Year of Publication:")
         }
 
-        dfs = []
-        merged_df=None
+        merged_df = None
 
-        # Collect DataFrames based on filters
+        dfs = []
+
         for key, value in filters.items():
             if value:
                 value = str(value).strip()
@@ -1276,52 +1276,37 @@ elif page == "Update Record":
                 elif key == 'Year of Publication':
                     dfs.append(library.getBooksOnYearPublished(value))
 
-        # Merge and display DataFrame
-        if len(dfs) == 1:
-            st.dataframe(dfs[0])
-        elif len(dfs) > 1:
-            merged_df = dfs[0]
-            for df in dfs[1:]:
-                merged_df = pd.merge(merged_df, df)
-            st.dataframe(merged_df.drop_duplicates())
-        else:
-            st.write("No filters applied or no matching results found.")
-        # Text-based Boolean for Update Confirmation
-        update_confirmation = st.text_input(
-            "Do you want to update the records? Enter 'yes' to proceed or leave blank to cancel:"
-        )
-
-        if update_confirmation.lower() == "yes":
-            if merged_df is not None:
-                st.write("Enter new values for the book (leave blank to retain existing values):")
-                changes = {
-                    'Number': st.text_input("New Number:", key="new_number"),
-                    'Title': st.text_input("New Title:", key="new_title"),
-                    'Publisher': st.text_input("New Publisher:", key="new_publisher"),
-                    'Language': st.text_input("New Language:", key="new_language"),
-                    'Number Of Copies': st.text_input("New Number of Copies:", key="new_copies"),
-                    'Genre': st.text_input("New Genre:", key="new_genre"),
-                    'Year of Publication': st.text_input("New Year of Publication:", key="new_year")
-                }
-
-                if "Number" in merged_df.columns:
-                    for book_id in merged_df['Number']:
-                        try:
-                            if book_id in library.books:
-                                library.update_Book(library.books[book_id], changes)
-                            else:
-                                st.warning(f"Book ID {book_id} not found in the library.")
-                        except Exception as e:
-                            st.error(f"Error updating book ID {book_id}: {e}")
-                    st.success("Records updated successfully!")
-                else:
-                    st.error("The 'Number' column is missing in the merged DataFrame.")
+            if len(dfs) == 1:
+                merged_df=dfs[0]
+            elif len(dfs) > 1:
+                merged_df = dfs[0]
+                for df in dfs[1:]:
+                    merged_df = pd.merge(merged_df, df)
             else:
-                st.error("No books selected for update. Please adjust your filters.")
-        else:
-            st.write("Update cancelled or not confirmed. Please try again.")
+                st.write("No filters applied")
+
+        st.write("Are these the records you want to update?")
+        st.dataframe(merged_df.drop_duplicates())
+
+        conformation=st.text_input("Enter Yes or No")
+
+        if conformation.lower()=='yes':
+            st.write("Please enter what you want to update, leave the things you want to stay the same empty")
+
+            changes = {
+            'Title': st.text_input("New Title:"),
+            'Publisher': st.text_input("New Publisher:"),
+            'Language': st.text_input("New Language:"),
+            'Genre': st.text_input("New Genre:"),
+            'Year of Publication': st.text_input("New Year of Publication:")
+        }
 
 
+            for id in merged_df['Number']:
+                library.update_Book(library.books[id],changes)
+
+
+        
 
     if data_type == "Authors":
         st.write("Please enter some details of the author that you want to update:")
