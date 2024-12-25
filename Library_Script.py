@@ -1219,6 +1219,7 @@ elif page == "Update Record":
 
 elif page == "Delete Record":
     st.header("Delete Record")
+    table_name = st.selectbox("Select Table", ["Books", "Authors", "Publishers","Issuing_History","Staff"])
 
     # Number of attributes to search by
     num_search_attributes = st.number_input("Number of search attributes:", min_value=1, value=1, step=1, key="delete_attr_count")
