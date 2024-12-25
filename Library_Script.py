@@ -673,227 +673,171 @@ class Library:
     def addIssueRecord(self,x:Issue_History):            
         self.issue_history[x.getID]=x
 
+    def updateBook(self, book_number, updates: dict):
+        set_clause = ', '.join([f"{key} = ?" for key in updates.keys()])
+        query = f'UPDATE books SET {set_clause} WHERE book_number = ?'
+        curr.execute(query, (*updates.values(), book_number))
+        conn.commit()
 
-    def update_Book(self,book:Books,x:dict):
-        for attribute,new_val in x:
-            if attribute=="Title":
-                if new_val:
-                    book.setTitle(new_val)
-            elif attribute=='Language':
-                if new_val:
-                    book.setLang(new_val)
-            elif attribute=="Genre":
-                if new_val:
-                    book.setGenre(new_val)
-            elif attribute=='Year of Publication':
-                if new_val:
-                    book.setYearPublished(new_val)
-            elif attribute=='Publisher':
-                if new_val:
-                    book.setPublisher(new_val)
-            elif attribute=='Number Of Copies':
-                if new_val:
-                    book.setNumCopies(new_val)
+    def deleteBook(self, book_number):
+        query = 'DELETE FROM books WHERE book_number = ?'
+        curr.execute(query, (book_number,))
+        conn.commit()
 
-            conn.commit()
-    
-    def update_Author(self,author:Authors,x:dict):
-            for attribute,new_val in x:
-                if attribute=="First Name":
-                    if new_val:
-                        author.setFirstName(new_val)
-                elif attribute=='Middle Name':
-                    if new_val:
-                        author.setMiddleName(new_val)
-                elif attribute=="Last Name":
-                    if new_val:
-                        author.setLastName(new_val)
-                elif attribute=="Language":
-                    if new_val:
-                        author.setLang(new_val)
+    def updateAuthor(self, author_id, updates: dict):
+        set_clause = ', '.join([f"{key} = ?" for key in updates.keys()])
+        query = f'UPDATE authors SET {set_clause} WHERE id = ?'
+        curr.execute(query, (*updates.values(), author_id))
+        conn.commit()
 
-                conn.commit()
-    
-    def update_Member(self,member:Members,x:dict):
-        for attribute,new_val in x:
-            if attribute=="First Name":
-                if new_val:
-                    member.setFirstName(new_val)
-            elif attribute=='Middle Name':
-                if new_val:
-                    member.setMiddleName(new_val)
-            elif attribute=="Last Name":
-                if new_val:
-                    member.setLastName(new_val)
-            elif attribute=='Area':
-                if new_val:
-                    member.setArea(new_val)
-            elif attribute=='Street':
-                if new_val:
-                    member.setStreetName(new_val)
-            elif attribute=='Building Number':
-                if new_val:
-                    member.setBuildingNo(new_val)
-            elif attribute=='Email':
-                if new_val:
-                    member.setEmail(new_val)
-            elif attribute=='Phone Number':
-                if new_val:
-                    member.setPhoneNumber(new_val)
+    def deleteAuthor(self, author_id):
+        query = 'DELETE FROM authors WHERE id = ?'
+        curr.execute(query, (author_id,))
+        conn.commit()
 
-            conn.commit()
-    
-    def update_Staff(self,staff:Staff,x:dict):
-        for attribute,new_val in x:
-            if attribute=="First Name":
-                if new_val:
-                    staff.setFirstName(new_val)
-            elif attribute=='Middle Name':
-                if new_val:
-                    staff.setMiddleName(new_val)
-            elif attribute=="Last Name":
-                if new_val:
-                    staff.setLastName(new_val)
-            elif attribute=='Position':
-                if new_val:
-                    staff.setPosition(new_val)
-            elif attribute=='Email':
-                if new_val:
-                    staff.setEmail(new_val)
-            elif attribute=='Phone Number':
-                if new_val:
-                    staff.setPhoneNumber(new_val)
-            
-            conn.commit()
+    def updateMember(self, member_id, updates: dict):
+        set_clause = ', '.join([f"{key} = ?" for key in updates.keys()])
+        query = f'UPDATE members SET {set_clause} WHERE id = ?'
+        curr.execute(query, (*updates.values(), member_id))
+        conn.commit()
 
-    def update_Issuing(self,issue:Issue_History,x:dict):
-        for attribute,new_val in x:
-            if attribute=="Issuing Date":
-                if new_val:
-                    issue.setIssuingDate(new_val)
-            elif attribute=='Return Date':
-                if new_val:
-                    issue.setReturnDate(new_val)
-            elif attribute=="Return Due":
-                if new_val:
-                    issue.setReturnDue(new_val)
+    def deleteMember(self, member_id):
+        query = 'DELETE FROM members WHERE id = ?'
+        curr.execute(query, (member_id,))
+        conn.commit()
 
-            conn.commit()
+    def updateStaff(self, staff_id, updates: dict):
+        set_clause = ', '.join([f"{key} = ?" for key in updates.keys()])
+        query = f'UPDATE staff SET {set_clause} WHERE id = ?'
+        curr.execute(query, (*updates.values(), staff_id))
+        conn.commit()
 
-    def delete_Book(self,id):
-        self.books[id].Delete()
+    def deleteStaff(self, staff_id):
+        query = 'DELETE FROM staff WHERE id = ?'
+        curr.execute(query, (staff_id,))
+        conn.commit()
 
-    def delete_Issue(self,id):
-        self.issue_history[id].Delete()
+    def updateIssueRecord(self, issue_id, updates: dict):
+        set_clause = ', '.join([f"{key} = ?" for key in updates.keys()])
+        query = f'UPDATE issue_history SET {set_clause} WHERE id = ?'
+        curr.execute(query, (*updates.values(), issue_id))
+        conn.commit()
 
-    def delete_Author(self,id):
-        self.authors[id].Delete()
+    def deleteIssueRecord(self, issue_id):
+        query = 'DELETE FROM issue_history WHERE id = ?'
+        curr.execute(query, (issue_id,))
+        conn.commit()
 
-    def delete_Member(self,id):
-        self.members[id].Delete()
-    
-    def delete_Staff(self,id):
-        self.staff[id].Delete()
-    
-    
-    
+    def getIDByAttributes(self, table_name, filters):
+        query = f"SELECT id FROM {table_name} WHERE " + " AND ".join([f"{col} = ?" for col in filters.keys()])
+        values = list(filters.values())
+        
+        try:
+            self.cursor.execute(query, values)
+            results = self.cursor.fetchall()
+            return [row[0] for row in results]  # Assuming ID is the first column in the result
+        except Exception as e:
+            print(f"Error fetching IDs: {e}")
+            return []
+
+
+
+ 
 
     
-
-
 #sl.write('Hello World')    
 
 
 
 # fake  data
 
-# Initialize Authors
-author1 = Authors(f="John", m="A", l="Doe", lang=["ENG"])
-author2 = Authors(f="Jane", m="B", l="Smith", lang=["ENG"])
-author3 = Authors(f="James", m="C", l="Johnson", lang=["ENG"])
-author4 = Authors(f="Emily", m="D", l="Williams", lang=["ENG"])
-author5 = Authors(f="Michael", m="E", l="Brown", lang=["ENG"])
+# # Initialize Authors
+# author1 = Authors(f="John", m="A", l="Doe", lang=["ENG"])
+# author2 = Authors(f="Jane", m="B", l="Smith", lang=["ENG"])
+# author3 = Authors(f="James", m="C", l="Johnson", lang=["ENG"])
+# author4 = Authors(f="Emily", m="D", l="Williams", lang=["ENG"])
+# author5 = Authors(f="Michael", m="E", l="Brown", lang=["ENG"])
 
-authors_in_library={
-    author1.getID():author1,
-    author2.getID():author2,
-    author3.getID():author3,
-    author4.getID():author4,
-    author5.getID():author5
-}
-
-
-# # Initialize Books
-book1 = Books(title="The Great Adventure", lang="ENG", year="2020-05-12", num_copies=10, publisher="Penguin", authors=[1],genre='Fanasty')
-book2 = Books(title="Science Explained", lang="ENG", year="2018-03-25", num_copies=5, publisher="HarperCollins", authors=[2],genre='Non Fiction')
-book3 = Books(title="Magic World", lang="ENG", year="2015-08-19", num_copies=8, publisher="Macmillan", authors=[3, 1],genre='Fanasty')  # John Doe also wrote this
-book4 = Books(title="Life of a Legend", lang="ENG", year="2019-07-30", num_copies=12, publisher="Random House", authors=[4],genre='Biography')
-book5 = Books(title="Physics for Beginners", lang="ENG", year="2017-09-18", num_copies=7, publisher="Oxford", authors=[5],genre='Non Fiction')
-
-books_in_library={
-    book1.getNumber():book1,
-    book2.getNumber():book2,
-    book3.getNumber():book3,
-    book4.getNumber():book4,
-    book5.getNumber():book5
-}
+# authors_in_library={
+#     author1.getID():author1,
+#     author2.getID():author2,
+#     author3.getID():author3,
+#     author4.getID():author4,
+#     author5.getID():author5
+# }
 
 
-# # Initialize Members
-member1 = Members(f="Alice", l="Green", street="Main St.", m="M", area="Downtown", build="101", email="alice.green@email.com", phone_number="123-456-7890")
-member2 = Members(f="Bob", l="Blue", street="Elm St.", m="N", area="Uptown", build="202", email="bob.blue@email.com", phone_number="234-567-8901")
-member3 = Members(f="Charlie", l="White", street="Oak St.", m="O", area="Suburbs", build="303", email="charlie.white@email.com", phone_number="345-678-9012")
-member4 = Members(f="David", l="Black", street="Pine St.", m="P", area="City Center", build="404", email="david.black@email.com", phone_number="456-789-0123")
-member5 = Members(f="Eve", l="Red", street="Coastal Rd.", m="Q", area="Beachside", build="505", email="eve.red@email.com", phone_number="567-890-1234")
+# # # Initialize Books
+# book1 = Books(title="The Great Adventure", lang="ENG", year="2020-05-12", num_copies=10, publisher="Penguin", authors=[1],genre='Fanasty')
+# book2 = Books(title="Science Explained", lang="ENG", year="2018-03-25", num_copies=5, publisher="HarperCollins", authors=[2],genre='Non Fiction')
+# book3 = Books(title="Magic World", lang="ENG", year="2015-08-19", num_copies=8, publisher="Macmillan", authors=[3, 1],genre='Fanasty')  # John Doe also wrote this
+# book4 = Books(title="Life of a Legend", lang="ENG", year="2019-07-30", num_copies=12, publisher="Random House", authors=[4],genre='Biography')
+# book5 = Books(title="Physics for Beginners", lang="ENG", year="2017-09-18", num_copies=7, publisher="Oxford", authors=[5],genre='Non Fiction')
 
-members_in_library={
-    member1.getID():member1,
-    member2.getID():member2,
-    member3.getID():member3,
-    member4.getID():member4,
-    member5.getID():member5
-}
-
-
-# # Initialize Staff
-staff1 = Staff(f="Sarah", l="Davis", street="Main St.", p="Manager", phone="678-901-2345", email="sarah.davis@email.com")
-staff2 = Staff(f="Tom", l="White", street="Elm St.", p="Assistant", phone="789-012-3456", email="tom.white@email.com")
-staff3 = Staff(f="Linda", l="Miller", street="Oak St.", p="Librarian", phone="890-123-4567", email="linda.miller@email.com")
-staff4 = Staff(f="James", l="Taylor", street="Pine St.", p="Security", phone="901-234-5678", email="james.taylor@email.com")
-staff5 = Staff(f="Sophia", l="Wilson", street="Coastal Rd.", p="Technician", phone="012-345-6789", email="sophia.wilson@email.com")
-
-staff_in_library={
-    staff1.getID():staff1,
-    staff2.getID():staff2,
-    staff3.getID():staff3,
-    staff4.getID():staff4,
-    staff5.getID():staff5
-
-}
+# books_in_library={
+#     book1.getNumber():book1,
+#     book2.getNumber():book2,
+#     book3.getNumber():book3,
+#     book4.getNumber():book4,
+#     book5.getNumber():book5
+# }
 
 
-# # Initialize Issue_History
-issue1 = Issue_History(issue_date="2024-11-01", due_date="2024-11-15", book_num=101, member_id=1, staff_id=3, return_date="2024-11-14")
-issue2 = Issue_History(issue_date="2024-11-05", due_date="2024-11-19", book_num=102, member_id=2, staff_id=4, return_date="2024-11-18")
-issue3 = Issue_History(issue_date="2024-10-20", due_date="2024-11-03", book_num=103, member_id=3, staff_id=2, return_date="2024-11-01")
-issue4 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=104, member_id=4, staff_id=5, return_date="2024-11-23")
-issue5 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date="2024-11-20")
-issue6 = Issue_History(issue_date="2024-10-20", due_date="2024-11-01", book_num=102, member_id=4, staff_id=1, return_date=None)
-issue7 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=102, member_id=3, staff_id=5, return_date=None)
-issue8 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date=None)
+# # # Initialize Members
+# member1 = Members(f="Alice", l="Green", street="Main St.", m="M", area="Downtown", build="101", email="alice.green@email.com", phone_number="123-456-7890")
+# member2 = Members(f="Bob", l="Blue", street="Elm St.", m="N", area="Uptown", build="202", email="bob.blue@email.com", phone_number="234-567-8901")
+# member3 = Members(f="Charlie", l="White", street="Oak St.", m="O", area="Suburbs", build="303", email="charlie.white@email.com", phone_number="345-678-9012")
+# member4 = Members(f="David", l="Black", street="Pine St.", m="P", area="City Center", build="404", email="david.black@email.com", phone_number="456-789-0123")
+# member5 = Members(f="Eve", l="Red", street="Coastal Rd.", m="Q", area="Beachside", build="505", email="eve.red@email.com", phone_number="567-890-1234")
 
-issuing_in_library={
-    issue1.getID():issue1,
-    issue2.getID():issue2,
-    issue3.getID():issue3,
-    issue4.getID():issue4,
-    issue5.getID():issue5,
-    issue6.getID():issue6,
-    issue7.getID():issue7,
-    issue8.getID():issue8
-}
+# members_in_library={
+#     member1.getID():member1,
+#     member2.getID():member2,
+#     member3.getID():member3,
+#     member4.getID():member4,
+#     member5.getID():member5
+# }
 
-library=Library(books=books_in_library,authors=authors_in_library,staff=staff_in_library,issue_history=issuing_in_library,members=members_in_library)
+
+# # # Initialize Staff
+# staff1 = Staff(f="Sarah", l="Davis", street="Main St.", p="Manager", phone="678-901-2345", email="sarah.davis@email.com")
+# staff2 = Staff(f="Tom", l="White", street="Elm St.", p="Assistant", phone="789-012-3456", email="tom.white@email.com")
+# staff3 = Staff(f="Linda", l="Miller", street="Oak St.", p="Librarian", phone="890-123-4567", email="linda.miller@email.com")
+# staff4 = Staff(f="James", l="Taylor", street="Pine St.", p="Security", phone="901-234-5678", email="james.taylor@email.com")
+# staff5 = Staff(f="Sophia", l="Wilson", street="Coastal Rd.", p="Technician", phone="012-345-6789", email="sophia.wilson@email.com")
+
+# staff_in_library={
+#     staff1.getID():staff1,
+#     staff2.getID():staff2,
+#     staff3.getID():staff3,
+#     staff4.getID():staff4,
+#     staff5.getID():staff5
+
+# }
+
+
+# # # Initialize Issue_History
+# issue1 = Issue_History(issue_date="2024-11-01", due_date="2024-11-15", book_num=101, member_id=1, staff_id=3, return_date="2024-11-14")
+# issue2 = Issue_History(issue_date="2024-11-05", due_date="2024-11-19", book_num=102, member_id=2, staff_id=4, return_date="2024-11-18")
+# issue3 = Issue_History(issue_date="2024-10-20", due_date="2024-11-03", book_num=103, member_id=3, staff_id=2, return_date="2024-11-01")
+# issue4 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=104, member_id=4, staff_id=5, return_date="2024-11-23")
+# issue5 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date="2024-11-20")
+# issue6 = Issue_History(issue_date="2024-10-20", due_date="2024-11-01", book_num=102, member_id=4, staff_id=1, return_date=None)
+# issue7 = Issue_History(issue_date="2024-11-10", due_date="2024-11-24", book_num=102, member_id=3, staff_id=5, return_date=None)
+# issue8 = Issue_History(issue_date="2024-11-07", due_date="2024-11-21", book_num=105, member_id=5, staff_id=1, return_date=None)
+
+# issuing_in_library={
+#     issue1.getID():issue1,
+#     issue2.getID():issue2,
+#     issue3.getID():issue3,
+#     issue4.getID():issue4,
+#     issue5.getID():issue5,
+#     issue6.getID():issue6,
+#     issue7.getID():issue7,
+#     issue8.getID():issue8
+# }
+
+library=Library()
 
 
 
@@ -904,7 +848,6 @@ library=Library(books=books_in_library,authors=authors_in_library,staff=staff_in
 # print(library.getAllAuthors())
 
 
-#Sidebar Navigation
 st.sidebar.title("Library Management")
 page = st.sidebar.selectbox(
     "Choose an option",
@@ -1158,7 +1101,6 @@ if page == "View Data":
                 st.dataframe(merged_df)  
             except KeyError:
                 st.write("No matching reaults found")
-
 elif page == "Add Record":
     record=st.sidebar.selectbox(
     "Choose an option",
@@ -1238,113 +1180,68 @@ elif page == "Add Record":
             st.success(f"Issuing number {issue.getIssueID()} added successfully!")
 
 elif page == "Update Record":
-    st.title("Update A Record")
-    data_type = st.selectbox("Select data to view", ["Books", "Authors", "Members", "Staff", "Issue History"])
+    st.header("Update Record")
 
-    if data_type == "Books":
-        id = st.text_input("Please enter the Number of the book (If you do not know refer to the veiw data section)")
-
-        st.write("What changes do you want to make?")
-
-        changes = {
-                'Number': st.text_input("New Number:"),
-                'Title': st.text_input("New Title:"),
-                'Publisher': st.text_input("New Publisher:"),
-                'Language': st.text_input("New Language:"),
-                'Number Of Copies': st.text_input("New Number of Copies:"),
-                'Genre': st.text_input("New Genre:"),
-                'Year of Publication': st.text_input("New Year of Publication:")
-            }
-
-        library.update_Book(id,changes)     
-
-    if data_type == "Authors":
-        id = st.text_input("Please enter the Author ID (If you do not know refer to the view data section)")
+    table_name = st.selectbox("Select Table", ["Books", "Authors", "Publishers","Issuing_History","Staff"]) 
 
 
-        st.write("Enter new values for the author (leave blank to retain existing values):")
-        changes = {
-            'First Name': st.text_input("New First Name:"),
-            'Middle Name': st.text_input("New Middle Name:"),
-            'Last Name': st.text_input("New Last Name:"),
-            'Language': st.text_input("New Language:")
-            }
+    num_search_attributes = st.number_input("Number of search attributes:", min_value=1, value=1, step=1)
+    search_attributes = {}
 
-        library.update_Author(id,changes)
+    for i in range(num_search_attributes):
+        col = st.text_input(f"Column {i + 1}:", key=f"update_search_col_{i}")
+        val = st.text_input(f"Value {i + 1}:", key=f"update_search_val_{i}")
+        if col and val:
+            search_attributes[col] = val
 
-    if data_type == "Members":
-        id = st.text_input("Please enter the Member ID (If you do not know refer to the view data section)")
+    # New values for update
+    num_update_attributes = st.number_input("Number of columns to update:", min_value=1, value=1, step=1)
+    update_attributes = {}
 
-        
-        st.write("Enter new values for the member (leave blank to retain existing values):")
-        changes = {
-            'First Name': st.text_input("New First Name:"),
-            'Middle Name': st.text_input("New Middle Name:"),
-            'Last Name': st.text_input("New Last Name:"),
-            'Area': st.text_input("New Area:"),
-            'Street': st.text_input("New Street:"),
-            'Building Number': st.text_input("New Building Number:"),
-            'Phone Number': st.text_input("New Phone Number:"),
-            'Email': st.text_input("New Email:")
-                }
+    for i in range(num_update_attributes):
+        col = st.text_input(f"Update Column {i + 1}:", key=f"update_col_{i}")
+        val = st.text_input(f"New Value {i + 1}:", key=f"update_val_{i}")
+        if col and val:
+            update_attributes[col] = val
 
-        library.update_Member(id,changes)
-
-    if data_type == "Staff":
-        id = st.text_input("Please enter the Staff ID (If you do not know refer to the view data section)")
-
-        st.write("Enter new values for the staff (leave blank to retain existing values):")
-        changes = {
-                'First Name': st.text_input("New First Name:"),
-                'Middle Name': st.text_input("New Middle Name:"),
-                'Last Name': st.text_input("New Last Name:"),
-                'Position': st.text_input("New Position:"),
-                'Phone Number': st.text_input("New Phone Number:"),
-                'Email': st.text_input("New Email:")
-                }
-
-        library.update_Staff(id,changes)
-
-    if data_type == "Issue History":
-        id = st.text_input("Please enter the Author ID (If you do not know refer to the view data section)")
-
-       
-        st.write("Enter new values for the issue (leave blank to retain existing values):")
-        changes = {
-                'Issuing Date': st.text_input("New Issuing Date:"),
-                'Return Date': st.text_input("New Return Date:"),
-                'Return Due': st.text_input("New Return Due:")
-                }
-
-        library.update_Issuing(id,changes)
+    if st.button("Update Record"):
+        try:
+            # Use getIDByAttributes to fetch the ID
+            record_id = library.getIDByAttributes(table_name, search_attributes)
+            if not record_id:
+                st.error("No record found with the given attributes.")
+            else:
+                # Perform the update operation
+                library.update(table_name, record_id, update_attributes)
+                st.success(f"Record with ID {record_id} updated successfully!")
+        except Exception as e:
+            st.error(f"Error updating record: {e}")
 
 elif page == "Delete Record":
-    st.title("Delete A Record")
-    data_type = st.selectbox("Select data to view", ["Books", "Authors", "Members", "Staff", "Issue History"])
+    st.header("Delete Record")
 
-    if data_type == "Books":
-        id = st.text_input("Please enter the Number of the book (If you do not know refer to the veiw data section)")
+    # Number of attributes to search by
+    num_search_attributes = st.number_input("Number of search attributes:", min_value=1, value=1, step=1, key="delete_attr_count")
+    search_attributes = {}
 
-        library.delete_Book(id)
+    for i in range(num_search_attributes):
+        col = st.text_input(f"Column {i + 1}:", key=f"delete_search_col_{i}")
+        val = st.text_input(f"Value {i + 1}:", key=f"delete_search_val_{i}")
+        if col and val:
+            search_attributes[col] = val
 
-    if data_type == "Authors":
-        id = st.text_input("Please enter the Author ID (If you do not know refer to the veiw data section)")
+    if st.button("Delete Record"):
+        try:
+            # Use getIDByAttributes to fetch the ID
+            record_id = library.getIDByAttributes(table_name, search_attributes)
+            if not record_id:
+                st.error("No record found with the given attributes.")
+            else:
+                # Perform the delete operation
+                library.delete(table_name, record_id)
+                st.success(f"Record with ID {record_id} deleted successfully!")
+        except Exception as e:
+            st.error(f"Error deleting record: {e}")
 
-        library.delete_Author(id)
-
-    if data_type == "Members":
-       id = st.text_input("Please enter the Member ID (If you do not know refer to the veiw data section)")
-
-       library.delete_Member(id)
-
-    if data_type == "Staff":
-        id = st.text_input("Please enter the Staff ID (If you do not know refer to the veiw data section)")
-
-        library.delete_Staff(id)
-
-    if data_type == "Issue History":
-        id = st.text_input("Please enter the Issue ID (If you do not know refer to the veiw data section)")
-
-        library.delete_Issue(id)
 
 conn.close()
